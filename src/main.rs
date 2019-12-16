@@ -1,3 +1,4 @@
+use std::fs::OpenOptions;
 use std::io;
 use std::io::Read;
 use std::io::Write;
@@ -53,8 +54,15 @@ fn main() -> io::Result<()> {
         }
     });
 
+    let mut f = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .open("/tmp/shiodome-rs.txt")
+        .unwrap();
+
     for l in receiver.iter() {
         println!("{}", l);
+        f.write(l.as_bytes()).unwrap();
     }
 
     Ok(())
